@@ -4,8 +4,8 @@
       placeholder="Nhập tên thành phố để tìm kiếm"
       v-model="keyword"
       :options="filteredList"
-      :keywordName="keywordName"
-      :code="code"
+      :keyLabel="keyLabel"
+      :keyValue="keyValue"
       :maxChoice="3"
       :listSelected="selectedCities"
       @handleSelectItem="handleSelectItem"
@@ -17,7 +17,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 
-import InputContainer from "./components/InputContainer.vue";
+import InputContainer from "@/components/InputContainer.vue";
 
 export default {
   components: {
@@ -26,8 +26,8 @@ export default {
   data() {
     return {
       keyword: "",
-      keywordName: "name",
-      code: "code",
+      keyLabel: "name",
+      keyValue: "code",
       selectedCities: [],
     };
   },
@@ -43,7 +43,7 @@ export default {
       return (
         (trimmedKeyword.length &&
           this.getCities.filter((city) =>
-            city[this.keywordName]
+            city[this.keyLabel]
               .toLowerCase()
               .includes(trimmedKeyword.toLowerCase())
           )) ||
@@ -60,7 +60,7 @@ export default {
 
     handleRemoveItem(item) {
       this.selectedCities = this.selectedCities.filter(
-        (city) => city[this.code] !== item[this.code]
+        (city) => city[this.keyValue] !== item[this.keyValue]
       );
     },
   },

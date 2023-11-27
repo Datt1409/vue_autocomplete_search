@@ -8,8 +8,8 @@
       <template v-if="listSelected.length">
         <SelectedItem
           v-for="item in listSelected"
-          :key="item[code]"
-          :keywordName="keywordName"
+          :key="item[keyValue]"
+          :keyLabel="keyLabel"
           :item="item"
           @handleRemoveItem="handleRemoveItem(item)"
         />
@@ -18,7 +18,7 @@
         v-if="!isMaxChoice"
         type="text"
         v-model="keyword"
-        :style="{ width: inputWidth }"
+        :class="{ 'not-empty': shrinkInput }"
         :placeholder="showPlaceholder"
         @input="handleInputSearch"
         @focus="isFocus = true"
@@ -28,8 +28,8 @@
     <DropdownBox
       v-if="showDropdownBox"
       :options="options"
-      :keywordName="keywordName"
-      :code="code"
+      :keyLabel="keyLabel"
+      :keyValue="keyValue"
       :listSelected="listSelected"
       @handleSelectItem="handleSelectItem"
     />
@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import DropdownBox from "./DropdownBox.vue";
-import SelectedItem from "./SelectedItem.vue";
-import SearchIcon from "./icons/SearchIcon.vue";
+import SearchIcon from "@/components/icons/SearchIcon.vue";
+import DropdownBox from "@/components/DropdownBox.vue";
+import SelectedItem from "@/components/SelectedItem.vue";
 
 export default {
   name: "InputContainer",
@@ -58,11 +58,11 @@ export default {
       default: () => [],
     },
 
-    keywordName: {
+    keyLabel: {
       type: String,
       default: () => "name",
     },
-    code: {
+    keyValue: {
       type: String,
       default: () => "code",
     },
@@ -87,6 +87,9 @@ export default {
     showDropdownBox() {
       return this.keyword.length && this.isFocus;
     },
+    shrinkInput() {
+      return this.listSelected.length;
+    },
     isMaxChoice() {
       return this.maxChoice && this.listSelected.length === this.maxChoice;
     },
@@ -94,20 +97,6 @@ export default {
       if (!this.listSelected.length) {
         return this.placeholder;
       }
-    },
-    inputWidth() {
-      if (this.listSelected.length) {
-        // Adjust the input width based on the number of selected items
-        const baseWidth = 200; // Base width for the input
-        const padding = 10; // Padding for the input
-        const totalSelectedWidth = this.listSelected.length * 40; // Modify this value to adjust spacing between selected items
-        // Calculate the width for the input
-        const width = baseWidth - totalSelectedWidth - padding;
-        // Ensure the width doesn't become negative
-        return width > 0 ? `${width}px` : "auto";
-      }
-
-      return "340px"; // Default width when no items are selected
     },
   },
 
@@ -165,6 +154,7 @@ export default {
       border: none;
       color: #333333;
       background: transparent;
+      width: 330px;
 
       &::placeholder {
         color: #bfbfbf;
@@ -172,6 +162,9 @@ export default {
 
       &:focus::placeholder {
         color: transparent;
+      }
+      &.not-empty {
+        width: 80px;
       }
     }
   }

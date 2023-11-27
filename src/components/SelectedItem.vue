@@ -1,6 +1,6 @@
 <template>
   <div class="item-selected">
-    <p>{{ extractProvinceCityName(item[keywordName]) }}</p>
+    <p>{{ extractProvinceCityName(item[keyLabel]) }}</p>
     <div class="icon-close" @click="handleRemoveItem(item)">
       <CloseIcon />
     </div>
@@ -10,7 +10,7 @@
 <script>
 import CloseIcon from "./icons/CloseIcon.vue";
 
-import { extractProvinceCityName } from "../utils";
+import { extractProvinceCityName } from "@/utils";
 
 export default {
   components: {
@@ -23,7 +23,7 @@ export default {
       default: () => {},
     },
 
-    keywordName: {
+    keyLabel: {
       type: String,
       default: () => "name",
     },
@@ -39,6 +39,7 @@ export default {
 
 <style lang="scss" scoped>
 .item-selected {
+  /* box-sizing: border-box; */
   display: flex;
   align-items: center;
   gap: 10px;
@@ -53,6 +54,7 @@ export default {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
+    color: #627d98;
   }
 
   .icon-close {

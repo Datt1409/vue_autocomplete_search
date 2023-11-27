@@ -3,11 +3,11 @@
     <template v-if="options.length">
       <div
         v-for="option in options"
-        :key="option[code]"
+        :key="option[keyValue]"
         class="dropdown-item"
         @click="handleSelectItem(option)"
       >
-        {{ extractProvinceCityName(option[keywordName]) }}
+        {{ extractProvinceCityName(option[keyLabel]) }}
       </div>
     </template>
 
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { extractProvinceCityName } from "../utils";
+import { extractProvinceCityName } from "@/utils";
 
 export default {
   props: {
@@ -26,12 +26,12 @@ export default {
       type: Array,
       default: () => [],
     },
-    keywordName: {
+    keyLabel: {
       type: String,
       default: () => "name",
     },
 
-    code: {
+    keyValue: {
       type: String,
       default: () => "code",
     },
@@ -57,7 +57,7 @@ export default {
     checkSelectedItems() {
       return (item) => {
         return this.listSelected.filter(
-          (city) => city[this.code] === item[this.code]
+          (city) => city[this.keyValue] === item[this.keyValue]
         ).length;
       };
     },
